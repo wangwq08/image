@@ -79,14 +79,12 @@ public class Reduce {
         /**
          * d://3.jpg 源图片
          * d://31.jpg 目标图片
-         * 压缩宽度和高度都是1000
-         *
          */
         System.out.println("压缩图片开始...");
         File srcfile = new File("d://3.jpg");
         System.out.println("压缩前srcfile size:" + srcfile.length());
-        reduceImg("d://3.jpg", "d://31.jpg", 600, 400,0.5f);
-        File distfile = new File("d://31.jpg");
+        reduceImg("d://3.jpg", "d://3.jpg", 600, 400,0.5f);
+        File distfile = new File("d://3.jpg");
         System.out.println("压缩后distfile size:" + distfile.length());
     }
 }
