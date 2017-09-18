@@ -23,11 +23,8 @@ public class GetController {
     @ResponseBody
     public byte[] ReadImage(@PathVariable("id") String id) throws IOException{
         String path=RealPath(id);        //根据ID读取路径
-        Reduce reduce =new Reduce();     //对图片进行压缩
-        reduce.reduceImg(path,path+"r",600,400,0.5f);
-
         // InputStream in = getClass().getResourceAsStream("D:/image/150408758875.jpg"); 读取项目资源文件
-        FileInputStream fs = new FileInputStream(path+"r");   //读取本地绝对路径
+        FileInputStream fs = new FileInputStream(path);   //读取本地绝对路径
         System.out.println(fs);
         return IOUtils.toByteArray(fs);
     }
