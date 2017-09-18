@@ -1,0 +1,72 @@
+package com.example.image.controller;
+
+import com.example.image.domain.DBUtil;
+import com.example.image.reduce.Reduce;
+import org.apache.commons.io.IOUtils;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+@RestController
+public class GetController {
+
+    @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] ReadImage(@PathVariable("id") String id) throws IOException{
+        String path=RealPath(id);        //根据ID读取路径
+        Reduce reduce =new Reduce();     //对图片进行压缩
+        reduce.reduceImg(path,path+"r",600,400,0.5f);
+
+        // InputStream in = getClass().getResourceAsStream("D:/image/150408758875.jpg"); 读取项目资源文件
+        FileInputStream fs = new FileInputStream(path+"r");   //读取本地绝对路径
+        System.out.println(fs);
+        return IOUtils.toByteArray(fs);
+    }
+    //数据库查询获取真实路径
+    private String RealPath(String newfilename){
+        Connection conn=null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        String GetPath=null;
+        try{
+            conn= DBUtil.getConn();
+            String sql="select path from image where newfilename=?";       //通过ID找到图片路径
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,newfilename);
+            rs=ps.executeQuery();   //执行查询
+            if(rs.next()){
+                GetPath=rs.getString("path");
+            }
+            System.out.println("查询成功");
+            System.out.println(GetPath);
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.closeConn(conn);
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return GetPath;
+    }
+}

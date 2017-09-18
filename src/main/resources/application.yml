@@ -1,0 +1,21 @@
+spring:
+  thymeleaf:
+    catch: false                   #缓存配置
+    prefix: classpath:/static/     #视图返回路径
+  http:
+    multipart:
+      maxFileSize: 10MB       #单个文件上传大小限制
+      maxRequestSize: 50MB    #总文件的上传大小限制
+  mvc:
+    view:
+      prefix: /               #默认前缀
+      suffix: .html           #响应页面默认后缀
+  datasource:
+    test:
+      driver-class-name: "com.informix.jdbc.IfxDriver"
+      url: "jdbc:mysql://localhost:3306/test"
+      username: "root"
+      password: ""
+
+server:
+  port: 8080                  #默认端口
