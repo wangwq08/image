@@ -2,6 +2,7 @@ package com.example.image.controller;
 
 import com.example.image.domain.DBUtil;
 import com.example.image.domain.Image;
+import com.example.image.reduce.Reduce;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +25,7 @@ public class UploadController {
      */
     @RequestMapping("upload")
     @ResponseBody
-    public Image upload(@RequestParam("fileName") MultipartFile file) {
+    public Image upload(@RequestParam("fileName") MultipartFile file) throws IOException{
 
         // /返回信息
         Image image = new Image();
@@ -46,8 +47,7 @@ public class UploadController {
         //保存路径
         String path = "D:/image";
         File dest = new File(path + "/" + fileName);
-        String imagepath = dest.toString();  //数据库存储路径
-        System.out.println(dest);
+//        String imagepath = repath.toString();  //数据库存储路径
         if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
             dest.getParentFile().mkdir();
         }
@@ -65,6 +65,10 @@ public class UploadController {
             image.setMessage("路径错误，请重新上传");
             return image;
         }
+        File repath=new File(path+"/"+"re"+fileName);
+        Reduce reduce =new Reduce();
+        reduce.reduceImg(dest.toString(),repath.toString(),600,400,0.5f);
+        String imagepath = repath.toString();  //数据库存储路径
         image= Write(fileName,newFilename,imagepath);
         return image;
     }
