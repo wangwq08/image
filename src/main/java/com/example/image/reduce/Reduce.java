@@ -55,9 +55,7 @@ public class Reduce {
     }
     /**
      * 获取图片宽度
-     *
-     * @param file
-     *            图片文件
+     * @param file 图片文件
      * @return 宽度
      */
     public static int[] getImgWidth(File file) {
@@ -77,8 +75,8 @@ public class Reduce {
     }
     public static  void main(String[] args) throws IOException {
         /**
-         * d://3.jpg 源图片
-         * d://31.jpg 目标图片
+         * d://1.jpg 源图片
+         * d://11.jpg 目标图片
          */
         System.out.println("压缩图片开始...");
         File srcfile = new File("d://1.jpg");
