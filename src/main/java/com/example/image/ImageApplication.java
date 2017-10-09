@@ -3,6 +3,11 @@ package com.example.image;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * @author wangwq
+ * @date 2017.9.26 11:51
+ */
+
 @SpringBootApplication
 public class ImageApplication {
 

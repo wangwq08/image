@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * @author wangwq
+ * @date 2017.9.26 11:51
+ */
 public class DBUtil {
     // 定义数据库连接参数
     public static final String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";

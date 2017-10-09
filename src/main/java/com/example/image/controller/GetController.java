@@ -16,6 +16,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 实现根据id读取图片
+ * @author wangwq
+ * @date 2017.9.26 11:51
+ */
+
 @RestController
 public class GetController {
 

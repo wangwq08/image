@@ -16,6 +16,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
 
+/**
+ * 实现图片的上传及保存
+ * @author wangwq
+ * @date 2017.9.26 11:51
+ */
+
 @Controller
 public class UploadController {
 

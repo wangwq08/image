@@ -1,5 +1,9 @@
 package com.example.image.domain;
 
+/**
+ * @author wangwq
+ * @date 2017.9.26 11:51
+ */
 public class Image {
     int code;   //1 为正常
     boolean success; //标志是否正确

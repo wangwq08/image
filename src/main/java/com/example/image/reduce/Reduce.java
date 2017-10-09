@@ -7,6 +7,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+/**
+ * @author wangwq
+ * @date 2017.9.26 11:51
+ */
+
 public class Reduce {
     /**
      * 采用指定宽度、高度或压缩比例 的方式对图片进行压缩
