@@ -47,6 +47,12 @@ public class UploadController {
 
         //图片名称
         String fileName = file.getOriginalFilename();
+
+        String temp[] = fileName.replaceAll("\\\\","/").split("/");   //路径名和文件名分割，获取文件名
+        if (temp.length > 1) {
+            fileName = temp[temp.length - 1];
+        }
+        System.out.println(fileName);
         String newFilename = UUID.randomUUID().toString();
         System.out.println(newFilename);
 
@@ -73,7 +79,7 @@ public class UploadController {
         }
         File repath=new File(path+"/"+"re"+fileName);
         Reduce reduce =new Reduce();
-        reduce.reduceImg(dest.toString(),repath.toString(),600,400,0.5f);
+        reduce.reduceImg(dest.toString(),repath.toString(),600,400,0.5f);              //压缩图片
         String imagepath = repath.toString();  //数据库存储路径
         image= Write(fileName,newFilename,imagepath);
         return image;
