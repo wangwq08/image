@@ -86,7 +86,7 @@ public class Reduce {
         System.out.println("压缩图片开始...");
         File srcfile = new File("d://1.jpg");
         System.out.println("压缩前srcfile size:" + srcfile.length());
-        reduceImg("d://1.jpg", "d://11.jpg", 600, 400,0.5f);
+        reduceImg("d://1.jpg", "d://11.jpg", 1024,  ,0.5f);
         File distfile = new File("d://11.jpg");
         System.out.println("压缩后distfile size:" + distfile.length());
     }
