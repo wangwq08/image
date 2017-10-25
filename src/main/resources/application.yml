@@ -4,7 +4,7 @@ spring:
     prefix: classpath:/static/     #视图返回路径
   http:
     multipart:
-      maxFileSize: 10MB       #单个文件上传大小限制
+      maxFileSize: 5MB       #单个文件上传大小限制
       maxRequestSize: 50MB    #总文件的上传大小限制
   mvc:
     view:

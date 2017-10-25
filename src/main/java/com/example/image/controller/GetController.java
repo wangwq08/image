@@ -25,8 +25,8 @@ import java.sql.SQLException;
 @RestController
 public class GetController {
 
-    @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody
+    @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 裁剪图
+//    @ResponseBody
     public byte[] ReadImage(@PathVariable("id") String id) throws IOException{
         String path=RealPath(id);        //根据ID读取路径
         // InputStream in = getClass().getResourceAsStream("D:/image/150408758875.jpg"); 读取项目资源文件
@@ -34,6 +34,17 @@ public class GetController {
         System.out.println(fs);
         return IOUtils.toByteArray(fs);
     }
+
+    @GetMapping(value = "/thumb/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 缩略图
+//    @ResponseBody
+    public byte[] ReadThumbImage(@PathVariable("id") String id) throws IOException{
+        String path=RealPath(id);        //根据ID读取路径
+        // InputStream in = getClass().getResourceAsStream("D:/image/150408758875.jpg"); 读取项目资源文件
+        FileInputStream fs = new FileInputStream(path);   //读取本地绝对路径
+        System.out.println(fs);
+        return IOUtils.toByteArray(fs);
+    }
+
     //数据库查询获取真实路径
     private String RealPath(String newfilename){
         Connection conn=null;

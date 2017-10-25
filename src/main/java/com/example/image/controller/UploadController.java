@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -31,7 +32,7 @@ public class UploadController {
      */
     @RequestMapping("upload")
     @ResponseBody
-    public Image upload(@RequestParam("fileName") MultipartFile file) throws IOException{
+    public Image upload(@RequestParam("filename") MultipartFile file) throws IOException{
 
         // /返回信息
         Image image = new Image();
@@ -44,6 +45,14 @@ public class UploadController {
             image.setMessage("图片为空，请重新上传");
             return image;
         }
+        if(!file.getContentType().substring(0,5).equals("image"))         //判断是不是图片文件
+        {
+            image.setMessage("不是图片文件，请重新上传");
+            return image;
+        }
+
+        System.out.println(file.getSize());
+
 
         //图片名称
         String fileName = file.getOriginalFilename();
@@ -77,13 +86,43 @@ public class UploadController {
             image.setMessage("路径错误，请重新上传");
             return image;
         }
-        File repath=new File(path+"/"+"re"+fileName);
+
+        File repath=new File(path+"/"+"1re"+fileName);
         Reduce reduce =new Reduce();
-        reduce.reduceImg(dest.toString(),repath.toString(),600,400,0.5f);              //压缩图片
+        reduce.reduceImg(dest.toString(),repath.toString(),1024,512,null);              //裁剪图片
         String imagepath = repath.toString();  //数据库存储路径
         image= Write(fileName,newFilename,imagepath);
+
+
+
+        //缩略图路径
+        String tpath = "D:/thumb";
+        File tdest = new File(tpath + "/" + fileName);
+        if (!tdest.getParentFile().exists()) { //判断文件父目录是否存在
+            tdest.getParentFile().mkdir();
+        }
+        try {
+            file.transferTo(tdest); //保存文件
+            System.out.println("保存到本地成功：" + tdest);
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        File trepath=new File(tpath+"/"+"2re"+fileName);
+        String tnewFilename=newFilename+"1";
+        reduce.reduceImg(tdest.toString(),trepath.toString(),100,50,null);              //缩略图片
+        String timagepath = trepath.toString();  //数据库存储路径
+        Write(fileName,tnewFilename,timagepath);
+
         return image;
     }
+
+
+
 
     //将图片路径保存到数据库中
     public static Image Write(String fileName,String newFilename,String imagepath){
