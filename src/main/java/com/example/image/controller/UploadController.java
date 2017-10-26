@@ -76,12 +76,14 @@ public class UploadController {
         if (temp.length > 1) {
             fileName = temp[temp.length - 1];
         }
-        System.out.println(fileName);
+
         String newFilename = UUID.randomUUID().toString();
-        System.out.println(newFilename);
+        fileName=newFilename;
+        System.out.println("重命名"+ fileName);
+        System.out.println("图片ID"+ newFilename);
 
         //保存路径
-        String path = "D:/image";
+        String path = "D:/Test";
         File dest = new File(path + "/" + fileName);
 //        String imagepath = repath.toString();  //数据库存储路径
         if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
@@ -101,44 +103,44 @@ public class UploadController {
             image.setMessage("路径错误，请重新上传");
             return image;
         }
-
-        File repath=new File(path+"/"+"1re"+fileName);
-
-        Reduce reduce =new Reduce();
-
+//
+//        String cpath="D:/image";
+//
+//        File repath=new File(path+"/"+fileName);
+//        Reduce reduce =new Reduce();
+//
+//        float ratio=reduce.getRadio(dest.toString());    //获取原图比例
+//        System.out.println("获取原图比例" + ratio);
+//        height=(int)(width/ratio);
+//        System.out.println("裁剪后的尺寸 "+width +height);
+//
+//        reduce.reduceImg(dest.toString(),repath.toString(),width,height,null);                      //裁剪图片 reduce.ratio为原图比例
+//        String imagepath = repath.toString();  //数据库存储路径
+//        image= Write(fileName,newFilename,imagepath);
+        Reduce reduce=new Reduce();
         float ratio=reduce.getRadio(dest.toString());    //获取原图比例
-        System.out.println("获取原图比例" + ratio);
+        //裁剪图路径
+        String cpath="D:/image";
+        File crepath=new File(cpath+"/"+fileName);
         height=(int)(width/ratio);
-        System.out.println("裁剪后的尺寸 "+width +height);
 
-        reduce.reduceImg(dest.toString(),repath.toString(),width,height,null);            //裁剪图片 reduce.ratio为原图比例
-        String imagepath = repath.toString();  //数据库存储路径
-        image= Write(fileName,newFilename,imagepath);
+        reduce.reduceImg(dest.toString(),crepath.toString(),width,height,null);
+        String imagepath=crepath.toString();      //数据库存储路径
+        image=Write(fileName,newFilename,imagepath);
+        System.out.println("裁剪图存储成功");
 
 
 
         //缩略图路径
         String tpath = "D:/thumb";
-        File tdest = new File(tpath + "/" + fileName);
-        if (!tdest.getParentFile().exists()) { //判断文件父目录是否存在
-            tdest.getParentFile().mkdir();
-        }
-        try {
-            file.transferTo(tdest); //保存文件
-            System.out.println("保存到本地成功：" + tdest);
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        File trepath=new File(tpath+"/"+"2re"+fileName);
+        File trepath=new File(tpath+"/"+fileName);
         String tnewFilename=newFilename+"1";
-        reduce.reduceImg(tdest.toString(),trepath.toString(),thumbwidth,50,null);              //缩略图片
+        thumbheight=(int)(thumbwidth/ratio);
+
+        reduce.reduceImg(dest.toString(),trepath.toString(),thumbwidth,thumbheight,null);              //缩略图片
         String timagepath = trepath.toString();  //数据库存储路径
         Write(fileName,tnewFilename,timagepath);
+        System.out.println("缩略图存储成功");
 
         return image;
     }
