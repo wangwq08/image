@@ -30,9 +30,18 @@ public class UploadController {
      * 实现文件上传
      * @return code：1  success:true  data:图片ID  message:上传成功
      */
+
+    public static int  width=1024;     //裁剪图宽度设置
+    public static int height;
+
+    public static int thumbwidth=100;  //缩略图宽度设置
+    public static int thumbheight;
+
     @RequestMapping("upload")
     @ResponseBody
     public Image upload(@RequestParam("filename") MultipartFile file) throws IOException{
+
+
 
         // /返回信息
         Image image = new Image();
@@ -45,13 +54,19 @@ public class UploadController {
             image.setMessage("图片为空，请重新上传");
             return image;
         }
+
         if(!file.getContentType().substring(0,5).equals("image"))         //判断是不是图片文件
         {
             image.setMessage("不是图片文件，请重新上传");
             return image;
         }
 
+        if(file.getSize()/1024>5120){                                    //判断是否超过最大值5M
+            image.setMessage("超过大小，请选择小于5M的图片上传");
+            return image;
+        }
         System.out.println(file.getSize());
+        System.out.println(file.getSize()/1024);
 
 
         //图片名称
@@ -88,8 +103,15 @@ public class UploadController {
         }
 
         File repath=new File(path+"/"+"1re"+fileName);
+
         Reduce reduce =new Reduce();
-        reduce.reduceImg(dest.toString(),repath.toString(),1024,512,null);              //裁剪图片
+
+        float ratio=reduce.getRadio(dest.toString());    //获取原图比例
+        System.out.println("获取原图比例" + ratio);
+        height=(int)(width/ratio);
+        System.out.println("裁剪后的尺寸 "+width +height);
+
+        reduce.reduceImg(dest.toString(),repath.toString(),width,height,null);            //裁剪图片 reduce.ratio为原图比例
         String imagepath = repath.toString();  //数据库存储路径
         image= Write(fileName,newFilename,imagepath);
 
@@ -114,7 +136,7 @@ public class UploadController {
 
         File trepath=new File(tpath+"/"+"2re"+fileName);
         String tnewFilename=newFilename+"1";
-        reduce.reduceImg(tdest.toString(),trepath.toString(),100,50,null);              //缩略图片
+        reduce.reduceImg(tdest.toString(),trepath.toString(),thumbwidth,50,null);              //缩略图片
         String timagepath = trepath.toString();  //数据库存储路径
         Write(fileName,tnewFilename,timagepath);
 

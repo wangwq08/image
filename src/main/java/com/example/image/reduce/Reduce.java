@@ -21,8 +21,9 @@ public class Reduce {
      * @param heightdist 压缩后图片高度（当rate==null时，必传）
      * @param rate 压缩比例
      */
-    public static void reduceImg(String imgsrc, String imgdist, int widthdist,
-                                 int heightdist, Float rate) throws IOException{
+    public static float ratio;          //原图长宽比例
+    public static void reduceImg(String imgsrc, String imgdist, int widthdist, int heightdist, Float rate) throws IOException{
+
         try {
             File srcfile = new File(imgsrc);
             // 检查文件是否存在
@@ -33,13 +34,18 @@ public class Reduce {
             if (rate != null && rate > 0) {
                 // 获取文件高度和宽度
                 int[] results = getImgWidth(srcfile);
+
                 if (results == null || results[0] == 0 || results[1] == 0) {
                     return;
                 } else {
+
                     widthdist = (int) (results[0] * rate);
                     heightdist = (int) (results[1] * rate);
                 }
             }
+
+            getImgWidth(srcfile);        //获取原图比例
+
             // 开始读取文件并进行压缩
             Image src = javax.imageio.ImageIO.read(srcfile);
             BufferedImage tag = new BufferedImage((int) widthdist,
@@ -58,6 +64,7 @@ public class Reduce {
             ex.printStackTrace();
         }
     }
+
     /**
      * 获取图片宽度
      * @param file 图片文件
@@ -77,6 +84,34 @@ public class Reduce {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * 获取原图比例：宽/高
+     * @param imgsrc 源图片地址
+     * @return ratio 原图比例
+     */
+    public static float getRadio(String imgsrc){
+        File file=new File(imgsrc);
+        InputStream is = null;
+        BufferedImage src = null;
+        int result[] = { 0, 0 };
+        try {
+            is = new FileInputStream(file);
+            src = javax.imageio.ImageIO.read(is);
+            result[0] = src.getWidth(null); // 得到源图宽
+            result[1] = src.getHeight(null); // 得到源图高
+
+            System.out.println("原图宽度："+ result[0]);
+            System.out.println("原图高度："+ result[1]);
+            ratio=(float)result[0]/result[1];                  //获取原图的比例，宽/高
+            System.out.println(String.format("%f %n", ratio));
+
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ratio;
     }
     public static  void main(String[] args) throws IOException {
         /**
