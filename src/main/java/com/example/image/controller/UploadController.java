@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -128,7 +131,7 @@ public class UploadController {
 
         reduce.reduceImg(dest.toString(),crepath.toString(),width,height,null);
         String imagepath=crepath.toString();      //数据库存储路径
-        image=Write(fileName,newFilename,imagepath);
+        image=Write1(fileName,newFilename,imagepath);
         System.out.println("裁剪图存储成功");
 
 
@@ -141,14 +144,11 @@ public class UploadController {
 
         reduce.reduceImg(dest.toString(),trepath.toString(),thumbwidth,thumbheight,null);              //缩略图片
         String timagepath = trepath.toString();  //数据库存储路径
-        Write(fileName,tnewFilename,timagepath);
+        //Write(fileName,tnewFilename,timagepath);
         System.out.println("缩略图存储成功");
 
         return image;
     }
-
-
-
 
     //将图片路径保存到数据库中
     public static Image Write(String fileName,String newFilename,String imagepath){
@@ -164,6 +164,53 @@ public class UploadController {
             ps.setString(2, fileName);
             ps.setString(3, newFilename);
             ps.setString(4, imagepath);
+            int count = ps.executeUpdate();
+            if (count > 0) {
+                System.out.println("插入成功！！");
+            } else {
+                System.out.println("插入失败！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.closeConn(conn);
+            if (null != ps) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Image image =new Image();
+        image.setCode(1);
+        image.setSuccess(true);
+        image.setData(newFilename);
+        image.setMessage("上传成功！");
+        return image;
+    }
+
+    //将图片ID保存到数据库：图片ID 上传时间  浏览次数  用户token
+    public static Image Write1(String fileName,String newFilename,String imagepath){
+
+        //将图片存到数据库中
+
+        Date date = new Date();//获得系统时间.
+        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        Timestamp goodsC_date = Timestamp.valueOf(nowTime);
+
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = DBUtil.getConn();
+            String sql = "insert into imageinfo (id,imageid,uploadtime,viewtimes,token)values(?,?,?,?,?) ";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, 0);
+            ps.setString(2, fileName);
+            ps.setTimestamp(3, goodsC_date);
+            ps.setInt(4, 0);
+            ps.setString(5,null);
             int count = ps.executeUpdate();
             if (count > 0) {
                 System.out.println("插入成功！！");
