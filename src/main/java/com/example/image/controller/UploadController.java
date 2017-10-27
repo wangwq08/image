@@ -44,8 +44,6 @@ public class UploadController {
     @ResponseBody
     public Image upload(@RequestParam("filename") MultipartFile file) throws IOException{
 
-
-
         // /返回信息
         Image image = new Image();
         image.setCode(0);
