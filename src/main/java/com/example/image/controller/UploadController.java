@@ -86,10 +86,10 @@ public class UploadController {
         System.out.println("重命名"+ fileName);
         System.out.println("图片ID"+ newFilename);
 
-        //保存路径
+        //原图路径
         String path = "D:/Test";
         File dest = new File(path + "/" + fileName);
-//        String imagepath = repath.toString();  //数据库存储路径
+
         if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
             dest.getParentFile().mkdir();
         }
@@ -107,20 +107,7 @@ public class UploadController {
             image.setMessage("路径错误，请重新上传");
             return image;
         }
-//
-//        String cpath="D:/image";
-//
-//        File repath=new File(path+"/"+fileName);
-//        Reduce reduce =new Reduce();
-//
-//        float ratio=reduce.getRadio(dest.toString());    //获取原图比例
-//        System.out.println("获取原图比例" + ratio);
-//        height=(int)(width/ratio);
-//        System.out.println("裁剪后的尺寸 "+width +height);
-//
-//        reduce.reduceImg(dest.toString(),repath.toString(),width,height,null);                      //裁剪图片 reduce.ratio为原图比例
-//        String imagepath = repath.toString();  //数据库存储路径
-//        image= Write(fileName,newFilename,imagepath);
+
         Reduce reduce=new Reduce();
         float ratio=reduce.getRadio(dest.toString());    //获取原图比例
 
