@@ -65,6 +65,7 @@ public class UploadController {
             image.setMessage("超过大小，请选择小于5M的图片上传");
             return image;
         }
+
         System.out.println(file.getSize());
         System.out.println(file.getSize()/1024);
 
@@ -119,6 +120,7 @@ public class UploadController {
 //        image= Write(fileName,newFilename,imagepath);
         Reduce reduce=new Reduce();
         float ratio=reduce.getRadio(dest.toString());    //获取原图比例
+
         //裁剪图路径
         String cpath="D:/image";
         File crepath=new File(cpath+"/"+fileName);
