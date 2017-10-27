@@ -49,6 +49,8 @@ public class GetController {
         return IOUtils.toByteArray(fs);
     }
 
+
+
     @RequestMapping("/json")                   //异常测试
     public String json() throws MyException{
         throw new MyException("发生错误2");
