@@ -2,17 +2,23 @@ package com.example.image.controller;
 
 import com.example.image.domain.DBUtil;
 import com.example.image.exception.MyException;
-import com.example.image.reduce.Reduce;
+import com.example.image.reduce.DownLoad;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 实现根据id读取图片
@@ -49,7 +55,57 @@ public class GetController {
         return IOUtils.toByteArray(fs);
     }
 
+    @GetMapping(value = "/zipimage/{ids}", produces ="File/zip")           //图片打包 返回流
+//    @ResponseBody
+    public byte[] ReadZipImage(@PathVariable("ids") String ids) throws IOException{
+        DownLoad dl = new DownLoad();       //调用打包压缩
+        String tarPath="D:/test1.0.zip";    //打包输出地址
+        ArrayList List = new ArrayList();   //需要打包的文件源地址
 
+
+//        String ids="014e4b28-b566-4bf0-a65c-afd4825900ac,ca1678f9-cf90-4e9a-af9b-7dbad897520a,e49d5147-0082-4cde-9561-32a093b4222c";
+        String strArray[]=null;
+        strArray=ids.split(",");
+//        System.out.println(strArray);              //id转化为数组
+        for(int i=0;i<strArray.length;i++)         //需要打包文件的地址
+        {
+            List.add(cpath+"/"+ strArray[i]);
+        }
+        String[] idpath=(String[])List.toArray(new String[0]);
+
+        System.out.println("开始打包");
+        dl.downLoadZIP(tarPath,idpath);
+        System.out.println("打包完成");
+
+        FileInputStream fs = new FileInputStream(tarPath);   //读取本地绝对路径
+        System.out.println("文件流");
+        System.out.println(fs);
+
+        return IOUtils.toByteArray(fs);
+    }
+
+
+    @PostMapping(value = "zip")                                            //打包图片，返回压缩包images.zip
+    public void downloadZipFile(@RequestParam("ids") String ids, HttpServletResponse response) throws IOException {
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
+        response.setHeader("Content-Disposition","attachment; filename=\"images.zip\"");
+
+        // List<String> fileNames = Arrays.asList("1.jpg","2.jpg","3.jpg");
+        String strArray[]=null;
+        strArray=ids.split(",");
+        ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
+
+        for(String fileName : strArray) {
+            ZipEntry zipEntry = new ZipEntry(fileName+".jpg");
+            zipOutputStream.putNextEntry(zipEntry);
+            FileInputStream inputStream = new FileInputStream("D:/image/"+fileName);
+            IOUtils.copy(inputStream,zipOutputStream);
+            inputStream.close();
+        }
+
+        zipOutputStream.closeEntry();
+        zipOutputStream.close();
+    }
 
     @RequestMapping("/json")                   //异常测试
     public String json() throws MyException{
