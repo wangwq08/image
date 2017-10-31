@@ -96,7 +96,7 @@ public class GetController {
         ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
 
         for(String fileName : strArray) {
-            ZipEntry zipEntry = new ZipEntry(fileName+".jpg");
+            ZipEntry zipEntry = new ZipEntry(fileName+".jpg");   //图片名
             zipOutputStream.putNextEntry(zipEntry);
             FileInputStream inputStream = new FileInputStream("D:/image/"+fileName);
             IOUtils.copy(inputStream,zipOutputStream);
