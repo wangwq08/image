@@ -85,7 +85,7 @@ public class GetController {
     }
 
 
-    @PostMapping(value = "zip")                                            //打包图片，返回压缩包images.zip
+    @GetMapping(value = "zip")                                            //打包图片，返回压缩包images.zip
     public void downloadZipFile(@RequestParam("ids") String ids, HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
         response.setHeader("Content-Disposition","attachment; filename=\"images.zip\"");
