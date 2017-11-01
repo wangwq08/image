@@ -21,7 +21,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * 实现根据id读取图片
+ * 实现图片获取：原图、裁剪图、缩略图 文件打包
  * @author wangwq
  * @date 2017.9.26 11:51
  */
