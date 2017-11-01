@@ -29,9 +29,9 @@ import java.util.zip.ZipOutputStream;
 @RestController
 public class GetController {
 
-    public static String ypath="D:/test";
-    public static String cpath="D:/image";
-    public static String tpath="D:/thumb";
+    public static String ypath="D:/test";        //原图存放路径
+    public static String cpath="D:/image";       //裁剪图存放路径
+    public static String tpath="D:/thumb";       //缩略图路径
 
     @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 裁剪图
 //    @ResponseBody
