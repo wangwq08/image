@@ -30,7 +30,8 @@ import java.util.UUID;
 public class UploadController {
 
     /**
-     * 实现文件上传
+     * 实现图片上传
+     * @autho wqwang
      * @return code：1  success:true  data:图片ID  message:上传成功
      */
 
@@ -40,7 +41,7 @@ public class UploadController {
     public static int thumbwidth=100;  //缩略图宽度设置
     public static int thumbheight;
 
-    @RequestMapping("upload")
+    @RequestMapping("upload")                                           //图片上传
     @ResponseBody
     public Image upload(@RequestParam("filename") MultipartFile file) throws IOException{
 
@@ -135,7 +136,7 @@ public class UploadController {
         return image;
     }
 
-    //将图片路径保存到数据库中
+    //将图片路径保存到数据库中     暂时没有使用
     public static Image Write(String fileName,String newFilename,String imagepath){
 
         //将图片存到数据库中
@@ -183,7 +184,6 @@ public class UploadController {
         Date date = new Date();//获得系统时间.
         String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
         Timestamp goodsC_date = Timestamp.valueOf(nowTime);
-
 
         Connection conn = null;
         PreparedStatement ps = null;
