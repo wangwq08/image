@@ -49,7 +49,7 @@ public class DownLoad {
         DownLoad dl = new DownLoad();      //调用打包压缩
         String tarPath="D:/test1.0.zip";    //打包输出地址
         String cpath="D:/image";            //裁剪图路径
-//        String[]  idpath=new String[3];                     //需要打包的文件源地址
+
         ArrayList List = new ArrayList();
 
         String ids="014e4b28-b566-4bf0-a65c-afd4825900ac,ca1678f9-cf90-4e9a-af9b-7dbad897520a,e49d5147-0082-4cde-9561-32a093b4222c";
@@ -58,7 +58,6 @@ public class DownLoad {
 
         for(int i=0;i<strArray.length;i++)         //需要打包文件的地址
         {
-//            idpath[i]=cpath+"/"+ strArray[i];
             List.add(cpath+"/"+ strArray[i]);
         }
         System.out.println("正常");

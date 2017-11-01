@@ -5,10 +5,10 @@ package com.example.image.domain;
  * @date 2017.9.26 11:51
  */
 public class Image {
-    int code;   //1 为正常
-    boolean success; //标志是否正确
-    String data;  //图片ID
-    String message; //提示信息
+    int code;                      //1 为正常
+    boolean success;               //标志是否正确
+    String data;                   //图片ID
+    String message;                //提示信息
 
     public void setCode(int code){
         this.code=code;
