@@ -80,19 +80,19 @@ public class GetController {
         return IOUtils.toByteArray(fs);
     }
 
-
     @PostMapping(value = "zip")                                            //打包图片，返回压缩包images.zip
     public void downloadZipFile(@RequestParam("ids") String ids, HttpServletResponse response) throws IOException {
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
-        response.setHeader("Content-Disposition","attachment; filename=\"images.zip\"");
 
-        // List<String> fileNames = Arrays.asList("1.jpg","2.jpg","3.jpg");
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
+        response.setHeader("Content-Disposition","attachment; filename=\"images.zip\"");     //压缩包名称
+
         String strArray[]=null;
         strArray=ids.split(",");
+
         ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
 
         for(String fileName : strArray) {
-            ZipEntry zipEntry = new ZipEntry(fileName+".jpg");   //图片名
+            ZipEntry zipEntry = new ZipEntry(fileName+".jpg");                            //图片名
             zipOutputStream.putNextEntry(zipEntry);
             FileInputStream inputStream = new FileInputStream("D:/image/"+fileName);
             IOUtils.copy(inputStream,zipOutputStream);
