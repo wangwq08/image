@@ -6,6 +6,8 @@ import com.example.image.domain.ImagePath;
 import com.example.image.domain.SqlInfo;
 import com.example.image.reduce.Reduce;
 import com.example.image.service.ImageServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +39,10 @@ public class UploadController {
      * @autho wqwang
      * @return code：1  success:true  data:图片ID  message:上传成功
      */
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
 
     public static int  width=1024;     //裁剪图宽度设置
     public static int height;
@@ -145,46 +151,6 @@ public class UploadController {
         return image;
     }
 
-    //将图片路径保存到数据库中     暂时没有使用
-    public static Image Write(String fileName,String newFilename,String imagepath){
-
-        //将图片存到数据库中
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = DBUtil.getConn();
-            String sql = "insert into image (id,filename,newfilename,path)values(?,?,?,?) ";
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, 0);
-            ps.setString(2, fileName);
-            ps.setString(3, newFilename);
-            ps.setString(4, imagepath);
-            int count = ps.executeUpdate();
-            if (count > 0) {
-                System.out.println("插入成功！！");
-            } else {
-                System.out.println("插入失败！");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.closeConn(conn);
-            if (null != ps) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        Image image =new Image();
-        image.setCode(1);
-        image.setSuccess(true);
-        image.setData(newFilename);
-        image.setMessage("上传成功！");
-        return image;
-    }
-
     //将图片ID保存到数据库：图片ID 上传时间  浏览次数  用户token
     public  Image Write1(String fileName,String newFilename,String imagepath){
 
@@ -193,37 +159,9 @@ public class UploadController {
         Date date = new Date();//获得系统时间.
         String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
         Timestamp goodsC_date = Timestamp.valueOf(nowTime);
-        System.out.println("连接数据库");
         this.imageService.create(0,fileName,goodsC_date,0,null);
-//        Connection conn = null;
-//        PreparedStatement ps = null;
-//        try {
-//            conn = DBUtil.getConn();
-//            String sql = "insert into imageinfo (id,imageid,uploadtime,viewtimes,token)values(?,?,?,?,?) ";
-//            ps = conn.prepareStatement(sql);
-//            ps.setInt(1, 0);
-//            ps.setString(2, fileName);
-//            ps.setTimestamp(3, goodsC_date);
-//            ps.setInt(4, 0);
-//            ps.setString(5,null);
-//            int count = ps.executeUpdate();
-//            if (count > 0) {
-//                System.out.println("插入成功！！");
-//            } else {
-//                System.out.println("插入失败！");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            DBUtil.closeConn(conn);
-//            if (null != ps) {
-//                try {
-//                    ps.close();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
+        this.logger.debug("当前时间：[{}] ",nowTime);
+
         Image image =new Image();
         image.setCode(1);
         image.setSuccess(true);

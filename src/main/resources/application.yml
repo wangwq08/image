@@ -27,5 +27,8 @@ imagepath:
 server:
   port: 8080                  #默认端口
 
-myProps: #自定义的属性和值
-  path: D:/test
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.example.image: DEBUG
+

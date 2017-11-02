@@ -14,12 +14,7 @@ public interface ImageService {
      * 记录浏览次数
      * viewtimes 增加
      */
-    void updateViewTimes(int viewtimes,String imageid);
+    void updateViewTimes(String imageid);
 
-    /**
-     * 查询
-     * 验证请求ID是否存在
-     */
-    int  getImage(String imageid);
 
 }
