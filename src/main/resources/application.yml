@@ -18,5 +18,15 @@ spring:
       username: "root"
       password: ""
 
+imagepath:
+  path : "D:/test"                  #原图地址
+  cpath : "D:/image"                #裁剪图地址
+  tpath : "D:/thumb"                #缩略图地址
+
+
+
 server:
   port: 8080                  #默认端口
+
+myProps: #自定义的属性和值
+  path: D:/test

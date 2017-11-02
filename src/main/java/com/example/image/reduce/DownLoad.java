@@ -1,4 +1,11 @@
 package com.example.image.reduce;
+import com.example.image.domain.ImagePath;
+import groovy.transform.ASTTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,6 +22,8 @@ public class DownLoad {
      * @param sourcePath 文件的来源地址，字符串数组
      * @throws IOException
      */
+    @Autowired
+    private static ImagePath ip;
     public static void downLoadZIP(String tagPath, String[] sourcePath) throws IOException {
         //zip输出流
         ZipOutputStream out = new ZipOutputStream(new FileOutputStream(tagPath));
@@ -47,7 +56,10 @@ public class DownLoad {
 //        dl.downLoadZIP("D:/test.zip", path); //把上面两个文件打包成test.zip输出到D盘根目录
 
         DownLoad dl = new DownLoad();      //调用打包压缩
+
         String tarPath="D:/test1.0.zip";    //打包输出地址
+//        String tarPath=ip.getTarPath();
+        System.out.println(ip.getTarPath());
         String cpath="D:/image";            //裁剪图路径
 
         ArrayList List = new ArrayList();

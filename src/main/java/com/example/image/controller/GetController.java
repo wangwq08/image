@@ -1,10 +1,12 @@
 package com.example.image.controller;
 
 import com.example.image.domain.DBUtil;
+import com.example.image.domain.ImagePath;
 import com.example.image.exception.MyException;
 import com.example.image.reduce.DownLoad;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,17 +28,19 @@ import java.util.zip.ZipOutputStream;
  * @date 2017.9.26 11:51
  */
 
+
+
 @RestController
 public class GetController {
 
-    public static String ypath="D:/test";        //原图存放路径
-    public static String cpath="D:/image";       //裁剪图存放路径
-    public static String tpath="D:/thumb";       //缩略图路径
+    @Autowired
+    private ImagePath ip;
 
     @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 裁剪图
 
     public byte[] ReadImage(@PathVariable("id") String id) throws IOException{
-//        String path=RealPath(id);        //根据ID读取路径
+
+        String cpath=ip.getCpath();
         String path=cpath+"/"+id;
         FileInputStream fs = new FileInputStream(path);   //读取本地绝对路径
         View(id);
@@ -47,7 +51,8 @@ public class GetController {
     @GetMapping(value = "/thumb/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 缩略图
 
     public byte[] ReadThumbImage(@PathVariable("id") String id) throws IOException{
-//        String path=RealPath(id);        //根据ID读取路径
+
+        String tpath=ip.getTpath();
         String  path=tpath+"/"+id;
         FileInputStream fs = new FileInputStream(path);   //读取本地绝对路径
         View(id);                  //记录访问次数
@@ -55,30 +60,30 @@ public class GetController {
         return IOUtils.toByteArray(fs);
     }
 
-    @GetMapping(value = "/zipimage/{ids}", produces ="File/zip")           //图片打包 返回流
-
-    public byte[] ReadZipImage(@PathVariable("ids") String ids) throws IOException{
-        DownLoad dl = new DownLoad();       //调用打包压缩
-        String tarPath="D:/test1.0.zip";    //打包输出地址
-        ArrayList List = new ArrayList();   //需要打包的文件源地址
-
-        String strArray[]=null;
-        strArray=ids.split(",");            //ids转化为数组
-
-        for(int i=0;i<strArray.length;i++)         //需要打包文件的地址
-        {
-            List.add(cpath+"/"+ strArray[i]);
-        }
-        String[] idpath=(String[])List.toArray(new String[0]);
-
-        System.out.println("开始打包");
-        dl.downLoadZIP(tarPath,idpath);
-        System.out.println("打包完成");
-
-        FileInputStream fs = new FileInputStream(tarPath);   //读取本地绝对路径
-
-        return IOUtils.toByteArray(fs);
-    }
+//    @GetMapping(value = "/zipimage/{ids}", produces ="File/zip")           //图片打包 返回流
+//
+//    public byte[] ReadZipImage(@PathVariable("ids") String ids) throws IOException{
+//        DownLoad dl = new DownLoad();       //调用打包压缩
+//        String tarPath="D:/test1.0.zip";    //打包输出地址
+//        ArrayList List = new ArrayList();   //需要打包的文件源地址
+//
+//        String strArray[]=null;
+//        strArray=ids.split(",");            //ids转化为数组
+//
+//        for(int i=0;i<strArray.length;i++)         //需要打包文件的地址
+//        {
+//            List.add(cpath+"/"+ strArray[i]);
+//        }
+//        String[] idpath=(String[])List.toArray(new String[0]);
+//
+//        System.out.println("开始打包");
+//        dl.downLoadZIP(tarPath,idpath);
+//        System.out.println("打包完成");
+//
+//        FileInputStream fs = new FileInputStream(tarPath);   //读取本地绝对路径
+//
+//        return IOUtils.toByteArray(fs);
+//    }
 
     @PostMapping(value = "zip")                                            //打包图片，返回压缩包images.zip
     public void downloadZipFile(@RequestParam("ids") String ids, HttpServletResponse response) throws IOException {

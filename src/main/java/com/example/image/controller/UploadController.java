@@ -2,7 +2,9 @@ package com.example.image.controller;
 
 import com.example.image.domain.DBUtil;
 import com.example.image.domain.Image;
+import com.example.image.domain.ImagePath;
 import com.example.image.reduce.Reduce;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,6 +42,9 @@ public class UploadController {
 
     public static int thumbwidth=100;  //缩略图宽度设置
     public static int thumbheight;
+
+    @Autowired
+    private ImagePath ip;
 
     @RequestMapping("upload")                                           //图片上传
     @ResponseBody
@@ -86,7 +91,7 @@ public class UploadController {
         System.out.println("图片ID"+ newFilename);
 
         //原图路径
-        String path = "D:/Test";
+        String path=ip.getPath();
         File dest = new File(path + "/" + fileName);
 
         if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
@@ -111,7 +116,7 @@ public class UploadController {
         float ratio=reduce.getRadio(dest.toString());    //获取原图比例
 
         //裁剪图路径
-        String cpath="D:/image";
+        String cpath=ip.getCpath();
         File crepath=new File(cpath+"/"+fileName);
         height=(int)(width/ratio);
 
@@ -123,7 +128,7 @@ public class UploadController {
 
 
         //缩略图路径
-        String tpath = "D:/thumb";
+        String tpath=ip.getTpath();
         File trepath=new File(tpath+"/"+fileName);
         String tnewFilename=newFilename+"1";
         thumbheight=(int)(thumbwidth/ratio);
