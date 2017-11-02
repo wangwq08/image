@@ -1,4 +1,4 @@
-package com.example.image.service;
+package com.piccfsit.image.service;
 
 import java.sql.Timestamp;
 

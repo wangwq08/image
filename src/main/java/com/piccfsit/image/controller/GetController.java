@@ -1,27 +1,22 @@
-package com.example.image.controller;
+package com.piccfsit.image.controller;
 
-import com.example.image.config.ISConfiguration;
-import com.example.image.domain.DBUtil;
-import com.example.image.domain.ImagePath;
-import com.example.image.exception.MyException;
-import com.example.image.reduce.DownLoad;
+import com.piccfsit.image.config.ISConfiguration;
+import com.piccfsit.image.domain.DBUtil;
+import com.piccfsit.image.exception.MyException;
 
-import com.example.image.service.ImageServiceImpl;
+import com.piccfsit.image.service.ImageServiceImpl;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 

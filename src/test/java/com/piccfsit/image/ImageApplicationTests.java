@@ -1,8 +1,6 @@
-package com.example.image;
+package com.piccfsit.image;
 
-import com.example.image.domain.ImagePath;
-import com.example.image.domain.SqlInfo;
-import com.example.image.service.ImageService;
+import com.piccfsit.image.service.ImageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

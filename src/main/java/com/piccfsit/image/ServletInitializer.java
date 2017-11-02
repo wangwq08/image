@@ -1,4 +1,4 @@
-package com.example.image;
+package com.piccfsit.image;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;

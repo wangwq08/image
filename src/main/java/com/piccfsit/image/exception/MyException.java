@@ -1,4 +1,4 @@
-package com.example.image.exception;
+package com.piccfsit.image.exception;
 
 
 public class MyException extends Exception {

@@ -1,10 +1,6 @@
-package com.example.image.reduce;
-import com.example.image.domain.ImagePath;
-import groovy.transform.ASTTest;
+package com.piccfsit.image.reduce;
+import com.piccfsit.image.domain.ImagePath;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,7 +54,6 @@ public class DownLoad {
         DownLoad dl = new DownLoad();      //调用打包压缩
 
         String tarPath="D:/test1.0.zip";    //打包输出地址
-//        String tarPath=ip.getTarPath();
         System.out.println(ip.getTarPath());
         String cpath="D:/image";            //裁剪图路径
 

@@ -1,11 +1,9 @@
-package com.example.image.controller;
+package com.piccfsit.image.controller;
 
-import com.example.image.domain.DBUtil;
-import com.example.image.domain.Image;
-import com.example.image.domain.ImagePath;
-import com.example.image.domain.SqlInfo;
-import com.example.image.reduce.Reduce;
-import com.example.image.service.ImageServiceImpl;
+import com.piccfsit.image.domain.Image;
+import com.piccfsit.image.domain.ImagePath;
+import com.piccfsit.image.reduce.Reduce;
+import com.piccfsit.image.service.ImageServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;

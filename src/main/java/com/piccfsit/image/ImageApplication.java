@@ -1,4 +1,4 @@
-package com.example.image;
+package com.piccfsit.image;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

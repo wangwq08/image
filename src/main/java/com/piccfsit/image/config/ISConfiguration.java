@@ -1,6 +1,6 @@
-package com.example.image.config;
+package com.piccfsit.image.config;
 
-import com.example.image.domain.ImagePath;
+import com.piccfsit.image.domain.ImagePath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

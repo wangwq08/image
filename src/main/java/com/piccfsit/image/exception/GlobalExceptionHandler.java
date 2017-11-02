@@ -1,6 +1,6 @@
-package com.example.image.exception;
+package com.piccfsit.image.exception;
 
-import com.example.image.domain.Image;
+import com.piccfsit.image.domain.Image;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

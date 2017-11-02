@@ -1,8 +1,10 @@
-package com.example.image.reduce;
+package com.piccfsit.image.reduce;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.sun.imageio.plugins.jpeg.JPEG;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -48,16 +50,16 @@ public class Reduce {
 
             // 开始读取文件并进行压缩
             Image src = javax.imageio.ImageIO.read(srcfile);
-            BufferedImage tag = new BufferedImage((int) widthdist,
-                    (int) heightdist, BufferedImage.TYPE_INT_RGB);
+            BufferedImage tag = new BufferedImage((int) widthdist, (int) heightdist, BufferedImage.TYPE_INT_RGB);
 
-            tag.getGraphics().drawImage(
-                    src.getScaledInstance(widthdist, heightdist,
-                            Image.SCALE_SMOOTH), 0, 0, null);
+            tag.getGraphics().drawImage(src.getScaledInstance(widthdist, heightdist, Image.SCALE_SMOOTH), 0, 0, null);
 
+//            FileOutputStream out = new FileOutputStream(imgdist);
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//            encoder.encode(tag);
+//            out.close();
             FileOutputStream out = new FileOutputStream(imgdist);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(tag);
+            ImageIO.write(tag, "JPEG", out);
             out.close();
 
         } catch (IOException ex) {

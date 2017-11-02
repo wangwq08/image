@@ -1,4 +1,4 @@
-package com.example.image.domain;
+package com.piccfsit.image.domain;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;

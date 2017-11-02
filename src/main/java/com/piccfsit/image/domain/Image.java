@@ -1,4 +1,4 @@
-package com.example.image.domain;
+package com.piccfsit.image.domain;
 
 /**
  * @author wangwq
