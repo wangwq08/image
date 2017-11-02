@@ -3,7 +3,9 @@ package com.example.image.controller;
 import com.example.image.domain.DBUtil;
 import com.example.image.domain.Image;
 import com.example.image.domain.ImagePath;
+import com.example.image.domain.SqlInfo;
 import com.example.image.reduce.Reduce;
+import com.example.image.service.ImageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -45,6 +46,9 @@ public class UploadController {
 
     @Autowired
     private ImagePath ip;
+
+    @Autowired
+    private ImageServiceImpl imageService;
 
     @RequestMapping("upload")                                           //图片上传
     @ResponseBody
@@ -182,43 +186,44 @@ public class UploadController {
     }
 
     //将图片ID保存到数据库：图片ID 上传时间  浏览次数  用户token
-    public static Image Write1(String fileName,String newFilename,String imagepath){
+    public  Image Write1(String fileName,String newFilename,String imagepath){
 
         //将图片存到数据库中
 
         Date date = new Date();//获得系统时间.
         String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
         Timestamp goodsC_date = Timestamp.valueOf(nowTime);
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = DBUtil.getConn();
-            String sql = "insert into imageinfo (id,imageid,uploadtime,viewtimes,token)values(?,?,?,?,?) ";
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, 0);
-            ps.setString(2, fileName);
-            ps.setTimestamp(3, goodsC_date);
-            ps.setInt(4, 0);
-            ps.setString(5,null);
-            int count = ps.executeUpdate();
-            if (count > 0) {
-                System.out.println("插入成功！！");
-            } else {
-                System.out.println("插入失败！");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.closeConn(conn);
-            if (null != ps) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        System.out.println("连接数据库");
+        this.imageService.create(0,fileName,goodsC_date,0,null);
+//        Connection conn = null;
+//        PreparedStatement ps = null;
+//        try {
+//            conn = DBUtil.getConn();
+//            String sql = "insert into imageinfo (id,imageid,uploadtime,viewtimes,token)values(?,?,?,?,?) ";
+//            ps = conn.prepareStatement(sql);
+//            ps.setInt(1, 0);
+//            ps.setString(2, fileName);
+//            ps.setTimestamp(3, goodsC_date);
+//            ps.setInt(4, 0);
+//            ps.setString(5,null);
+//            int count = ps.executeUpdate();
+//            if (count > 0) {
+//                System.out.println("插入成功！！");
+//            } else {
+//                System.out.println("插入失败！");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            DBUtil.closeConn(conn);
+//            if (null != ps) {
+//                try {
+//                    ps.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
         Image image =new Image();
         image.setCode(1);
         image.setSuccess(true);

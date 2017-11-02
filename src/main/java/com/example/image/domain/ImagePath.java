@@ -2,16 +2,14 @@ package com.example.image.domain;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix = "imagepath")
-@Component
 public class ImagePath {
 
     private String path;
     private String cpath;
     private String tpath;
-    private static String tarPath;
+    private String tarPath;
 
 
     public void setPath(String path){
@@ -38,7 +36,7 @@ public class ImagePath {
     public void setTarPath(String tarPath){
         this.tarPath=tarPath;
     }
-    public static String getTarPath(){
+    public  String getTarPath(){
         return tarPath;
     }
 }

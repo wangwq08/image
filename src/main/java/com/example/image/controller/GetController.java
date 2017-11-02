@@ -1,5 +1,6 @@
 package com.example.image.controller;
 
+import com.example.image.config.ISConfiguration;
 import com.example.image.domain.DBUtil;
 import com.example.image.domain.ImagePath;
 import com.example.image.exception.MyException;
@@ -7,6 +8,7 @@ import com.example.image.reduce.DownLoad;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,13 +36,13 @@ import java.util.zip.ZipOutputStream;
 public class GetController {
 
     @Autowired
-    private ImagePath ip;
+    private ISConfiguration isconfig;
 
     @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 裁剪图
 
     public byte[] ReadImage(@PathVariable("id") String id) throws IOException{
 
-        String cpath=ip.getCpath();
+        String cpath=isconfig.ip.getCpath();
         String path=cpath+"/"+id;
         FileInputStream fs = new FileInputStream(path);   //读取本地绝对路径
         View(id);
@@ -52,7 +54,7 @@ public class GetController {
 
     public byte[] ReadThumbImage(@PathVariable("id") String id) throws IOException{
 
-        String tpath=ip.getTpath();
+        String tpath=isconfig.ip.getTpath();
         String  path=tpath+"/"+id;
         FileInputStream fs = new FileInputStream(path);   //读取本地绝对路径
         View(id);                  //记录访问次数

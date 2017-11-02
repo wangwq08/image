@@ -12,11 +12,10 @@ spring:
       prefix: /               #默认前缀
       suffix: .html           #响应页面默认后缀
   datasource:
-    test:
-      driver-class-name: "com.informix.jdbc.IfxDriver"
-      url: "jdbc:mysql://localhost:3306/test"
-      username: "root"
-      password: ""
+    driver-class-name: "com.mysql.jdbc.Driver"
+    url: "jdbc:mysql://localhost:3306/test"
+    username: "root"
+    password: ""
 
 imagepath:
   path : "D:/test"                  #原图地址

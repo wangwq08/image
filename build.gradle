@@ -47,13 +47,13 @@ configurations {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile('org.springframework.hateoas:spring-hateoas:0.15.0.RELEASE')
     compile('org.springframework.boot:spring-boot-configuration-processor')
 
 	compile('javax.servlet:javax.servlet-api')
 	compile('commons-io:commons-io:2.4')
     compile('mysql:mysql-connector-java')
-    compile('org.springframework.boot:spring-boot-devtools')
-	compile('org.springframework.boot:spring-boot-starter-tomcat')
+    runtime('org.springframework.boot:spring-boot-devtools')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
