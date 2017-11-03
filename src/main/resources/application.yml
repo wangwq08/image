@@ -22,7 +22,9 @@ imagepath:
   cpath : "D:/image"                #裁剪图地址
   tpath : "D:/thumb"                #缩略图地址
 
-
+imagesize:
+  width: 1024                      #裁剪图宽度
+  thumbwidth: 100                 #缩略图宽度
 
 server:
   port: 8080                  #默认端口

@@ -1,9 +1,10 @@
 package com.piccfsit.image.controller;
 
+import com.piccfsit.image.config.ISConfiguration;
 import com.piccfsit.image.domain.Image;
-import com.piccfsit.image.domain.ImagePath;
-import com.piccfsit.image.reduce.Reduce;
 import com.piccfsit.image.service.ImageServiceImpl;
+import com.piccfsit.image.service.ReduceService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +33,15 @@ public class UploadController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public static int  width=1024;     //裁剪图宽度设置
-    public static int height;
-
-    public static int thumbwidth=100;  //缩略图宽度设置
-    public static int thumbheight;
-
     @Autowired
-    private ImagePath ip;
+    private ISConfiguration isconfig;
 
     @Autowired
     private ImageServiceImpl imageService;
+
+    @Autowired
+    private ReduceService reduceService;
+
 
     @RequestMapping("upload")                                           //图片上传
     @ResponseBody
@@ -59,13 +58,13 @@ public class UploadController {
             return image;
         }
 
-        if(!file.getContentType().substring(0,5).equals("image"))         //判断是不是图片文件
+        if(!file.getContentType().substring(0,5).equals("image"))
         {
             image.setMessage("不是图片文件，请重新上传");
             return image;
         }
 
-        if(file.getSize()/1024>5120){                                    //判断是否超过最大值5M
+        if(file.getSize()/1024>5120){
             image.setMessage("超过大小，请选择小于5M的图片上传");
             return image;
         }
@@ -76,7 +75,7 @@ public class UploadController {
         this.logger.debug("生成图片ID  [{}]",fileName);
 
         //原图路径
-        String path=ip.getPath();
+        String path=isconfig.ip.getPath();
         File dest = new File(path + "/" + fileName);
 
         if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
@@ -84,7 +83,7 @@ public class UploadController {
         }
         try {
             file.transferTo(dest); //保存文件
-            System.out.println("保存到本地成功：" + dest);
+            this.logger.debug("保存到本地成功： [{}]",dest);
         } catch (IllegalStateException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -97,21 +96,22 @@ public class UploadController {
             return image;
         }
 
-        Reduce reduce=new Reduce();
-        float ratio=reduce.getRadio(dest.toString());    //获取原图比例
+        float ratio=reduceService.getRadio(dest.toString());    //获取原图比例
 
         //裁剪图路径
-        String cpath=ip.getCpath();
+        String cpath=isconfig.ip.getCpath();
         File crepath=new File(cpath+"/"+fileName);
-        height=(int)(width/ratio);
-        reduce.reduceImg(dest.toString(),crepath.toString(),width,height,null);                        //裁剪图片
+        int width=isconfig.is.getWidth();
+        int height=(int)(width/ratio);
+        reduceService.reduceImg(dest.toString(),crepath.toString(),width,height,null);                        //裁剪图片
         this.logger.info("裁剪图存储成功");
 
         //缩略图路径
-        String tpath=ip.getTpath();
+        String tpath=isconfig.ip.getTpath();
         File trepath=new File(tpath+"/"+fileName);
-        thumbheight=(int)(thumbwidth/ratio);
-        reduce.reduceImg(dest.toString(),trepath.toString(),thumbwidth,thumbheight,null);              //缩略图片
+        int thumbwidth=isconfig.is.getThumbwidth();
+        int thumbheight=(int)(thumbwidth/ratio);
+        reduceService.reduceImg(dest.toString(),trepath.toString(),thumbwidth,thumbheight,null);              //缩略图片
         this.logger.info("缩略图存储成功");
 
         image=Write(fileName);                         //将图片ID写入数据库

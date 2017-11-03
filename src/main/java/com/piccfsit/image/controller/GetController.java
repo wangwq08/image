@@ -1,9 +1,8 @@
 package com.piccfsit.image.controller;
 
 import com.piccfsit.image.config.ISConfiguration;
-import com.piccfsit.image.exception.MyException;
-
 import com.piccfsit.image.service.ImageServiceImpl;
+import com.piccfsit.image.service.ZipService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,9 @@ public class GetController {
     @Autowired
     private ImageServiceImpl imageService;
 
+    @Autowired
+    private ZipService zipService;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 裁剪图
@@ -56,32 +58,9 @@ public class GetController {
         return IOUtils.toByteArray(fs);
     }
 
-    @PostMapping(value = "zip")                                                       //打包图片，返回压缩包images.zip
-    public void downloadZipFile(@RequestParam("ids") String ids, HttpServletResponse response) throws IOException {
-
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
-        response.setHeader("Content-Disposition","attachment; filename=\"images.zip\"");     //压缩包名称
-
-        String strArray[]=null;
-        strArray=ids.split(",");
-
-        ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
-
-        for(String fileName : strArray) {
-            ZipEntry zipEntry = new ZipEntry(fileName+".jpg");                            //图片名
-            zipOutputStream.putNextEntry(zipEntry);
-            FileInputStream inputStream = new FileInputStream("D:/image/"+fileName);
-            IOUtils.copy(inputStream,zipOutputStream);
-            inputStream.close();
-        }
-
-        zipOutputStream.closeEntry();
-        zipOutputStream.close();
-    }
-
-    @RequestMapping("/json")                   //异常测试
-    public String json() throws MyException{
-        throw new MyException("发生错误2");
+    @PostMapping(value = "zip")                                                        //返回图片压缩包
+    public void ZipImage(@RequestParam("ids") String ids,HttpServletResponse response) throws IOException{
+        zipService.DownloadZip(ids,response);
     }
 
     //更新数据库访问次数

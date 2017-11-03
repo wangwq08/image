@@ -1,26 +1,17 @@
-package com.piccfsit.image.reduce;
+package com.piccfsit.image.service;
+
+
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-/**
- * @author wangwq
- * @date 2017.9.26 11:51
- */
-
-public class Reduce {
-    /**
-     * 采用指定宽度、高度或压缩比例 的方式对图片进行压缩
-     * @param imgsrc 源图片地址
-     * @param imgdist 目标图片地址
-     * @param widthdist 压缩后图片宽度（当rate==null时，必传）
-     * @param heightdist 压缩后图片高度（当rate==null时，必传）
-     * @param rate 压缩比例
-     */
+@Service
+public class ReduceService {
     public static float ratio;          //原图长宽比例
-    public static void reduceImg(String imgsrc, String imgdist, int widthdist, int heightdist, Float rate) throws IOException{
+    public static void reduceImg(String imgsrc, String imgdist, int widthdist, int heightdist, Float rate) throws IOException {
 
         try {
             File srcfile = new File(imgsrc);
@@ -59,11 +50,6 @@ public class Reduce {
         }
     }
 
-    /**
-     * 获取图片宽度
-     * @param file 图片文件
-     * @return 宽度
-     */
     public static int[] getImgWidth(File file) {
         InputStream is = null;
         BufferedImage src = null;
@@ -80,11 +66,6 @@ public class Reduce {
         return result;
     }
 
-    /**
-     * 获取原图比例：宽/高
-     * @param imgsrc 源图片地址
-     * @return ratio 原图比例
-     */
     public static float getRadio(String imgsrc){
         File file=new File(imgsrc);
         InputStream is = null;
@@ -96,27 +77,11 @@ public class Reduce {
             result[0] = src.getWidth(null); // 得到源图宽
             result[1] = src.getHeight(null); // 得到源图高
 
-            System.out.println("原图宽度："+ result[0]);
-            System.out.println("原图高度："+ result[1]);
             ratio=(float)result[0]/result[1];                  //获取原图的比例，宽/高
-            System.out.println(String.format("%f %n", ratio));
-
             is.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return ratio;
-    }
-    public static  void main(String[] args) throws IOException {
-        /**
-         * d://1.jpg 源图片
-         * d://11.jpg 目标图片
-         */
-        System.out.println("压缩图片开始...");
-        File srcfile = new File("d://1.jpg");
-        System.out.println("压缩前srcfile size:" + srcfile.length());
-        reduceImg("d://1.jpg", "d://11.jpg", 1024,512  ,0.5f);
-        File distfile = new File("d://11.jpg");
-        System.out.println("压缩后distfile size:" + distfile.length());
     }
 }
