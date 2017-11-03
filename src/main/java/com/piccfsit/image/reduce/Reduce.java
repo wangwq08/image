@@ -1,9 +1,5 @@
 package com.piccfsit.image.reduce;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.imageio.plugins.jpeg.JPEG;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -54,10 +50,6 @@ public class Reduce {
 
             tag.getGraphics().drawImage(src.getScaledInstance(widthdist, heightdist, Image.SCALE_SMOOTH), 0, 0, null);
 
-//            FileOutputStream out = new FileOutputStream(imgdist);
-//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-//            encoder.encode(tag);
-//            out.close();
             FileOutputStream out = new FileOutputStream(imgdist);
             ImageIO.write(tag, "JPEG", out);
             out.close();

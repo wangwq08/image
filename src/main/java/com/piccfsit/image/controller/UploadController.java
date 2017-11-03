@@ -34,10 +34,7 @@ public class UploadController {
      * @autho wqwang
      * @return code：1  success:true  data:图片ID  message:上传成功
      */
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-
 
     public static int  width=1024;     //裁剪图宽度设置
     public static int height;
@@ -51,11 +48,11 @@ public class UploadController {
     @Autowired
     private ImageServiceImpl imageService;
 
+
     @RequestMapping("upload")                                           //图片上传
     @ResponseBody
     public Image upload(@RequestParam("filename") MultipartFile file) throws IOException{
-
-        // /返回信息
+        // 返回信息
         Image image = new Image();
         image.setCode(0);
         image.setSuccess(false);
@@ -77,9 +74,8 @@ public class UploadController {
             image.setMessage("超过大小，请选择小于5M的图片上传");
             return image;
         }
+        this.logger.debug("文件大小   [{}]KB",file.getSize()/1024);
 
-        System.out.println(file.getSize());
-        System.out.println(file.getSize()/1024);
 
 
         //图片名称
@@ -92,8 +88,7 @@ public class UploadController {
 
         String newFilename = UUID.randomUUID().toString();
         fileName=newFilename;
-        System.out.println("重命名"+ fileName);
-        System.out.println("图片ID"+ newFilename);
+        this.logger.debug("生成图片ID  [{}]",newFilename);
 
         //原图路径
         String path=ip.getPath();
@@ -140,7 +135,6 @@ public class UploadController {
 
         reduce.reduceImg(dest.toString(),trepath.toString(),thumbwidth,thumbheight,null);              //缩略图片
         String timagepath = trepath.toString();  //数据库存储路径
-        //Write(fileName,tnewFilename,timagepath);
         System.out.println("缩略图存储成功");
 
         return image;
@@ -149,13 +143,11 @@ public class UploadController {
     //将图片ID保存到数据库：图片ID 上传时间  浏览次数  用户token
     public  Image Write1(String fileName,String newFilename,String imagepath){
 
-        //将图片存到数据库中
-
         Date date = new Date();//获得系统时间.
         String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
         Timestamp goodsC_date = Timestamp.valueOf(nowTime);
+
         this.imageService.create(0,fileName,goodsC_date,0,null);
-        this.logger.debug("当前时间：[{}] ",nowTime);
 
         Image image =new Image();
         image.setCode(1);

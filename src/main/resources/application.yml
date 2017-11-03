@@ -30,5 +30,5 @@ server:
 logging:
   level:
     org.springframework.web: DEBUG
-    com.example.image: DEBUG
+    com.piccfsit.image: DEBUG
 

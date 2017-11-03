@@ -1,11 +1,12 @@
 package com.piccfsit.image.controller;
 
 import com.piccfsit.image.config.ISConfiguration;
-import com.piccfsit.image.domain.DBUtil;
 import com.piccfsit.image.exception.MyException;
 
 import com.piccfsit.image.service.ImageServiceImpl;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -25,8 +22,6 @@ import java.util.zip.ZipOutputStream;
  * @author wangwq
  * @date 2017.9.26 11:51
  */
-
-
 
 @RestController
 public class GetController {
@@ -37,56 +32,31 @@ public class GetController {
     @Autowired
     private ImageServiceImpl imageService;
 
-    @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 裁剪图
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 裁剪图
     public byte[] ReadImage(@PathVariable("id") String id) throws IOException{
 
         String cpath=isconfig.ip.getCpath();
         String path=cpath+"/"+id;
         FileInputStream fs = new FileInputStream(path);   //读取本地绝对路径
         View(id);
-        System.out.println(fs);
+        this.logger.info("获取裁剪图成功");
         return IOUtils.toByteArray(fs);
     }
 
     @GetMapping(value = "/thumb/{id}", produces = MediaType.IMAGE_JPEG_VALUE)          //获取 缩略图
-
     public byte[] ReadThumbImage(@PathVariable("id") String id) throws IOException{
 
         String tpath=isconfig.ip.getTpath();
         String  path=tpath+"/"+id;
         FileInputStream fs = new FileInputStream(path);   //读取本地绝对路径
         View(id);                  //记录访问次数
-        System.out.println(fs);
+        this.logger.info("获取缩略图成功");
         return IOUtils.toByteArray(fs);
     }
 
-//    @GetMapping(value = "/zipimage/{ids}", produces ="File/zip")           //图片打包 返回流
-//
-//    public byte[] ReadZipImage(@PathVariable("ids") String ids) throws IOException{
-//        DownLoad dl = new DownLoad();       //调用打包压缩
-//        String tarPath="D:/test1.0.zip";    //打包输出地址
-//        ArrayList List = new ArrayList();   //需要打包的文件源地址
-//
-//        String strArray[]=null;
-//        strArray=ids.split(",");            //ids转化为数组
-//
-//        for(int i=0;i<strArray.length;i++)         //需要打包文件的地址
-//        {
-//            List.add(cpath+"/"+ strArray[i]);
-//        }
-//        String[] idpath=(String[])List.toArray(new String[0]);
-//
-//        System.out.println("开始打包");
-//        dl.downLoadZIP(tarPath,idpath);
-//        System.out.println("打包完成");
-//
-//        FileInputStream fs = new FileInputStream(tarPath);   //读取本地绝对路径
-//
-//        return IOUtils.toByteArray(fs);
-//    }
-
-    @PostMapping(value = "zip")                                            //打包图片，返回压缩包images.zip
+    @PostMapping(value = "zip")                                                       //打包图片，返回压缩包images.zip
     public void downloadZipFile(@RequestParam("ids") String ids, HttpServletResponse response) throws IOException {
 
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
@@ -114,53 +84,11 @@ public class GetController {
         throw new MyException("发生错误2");
     }
 
-    //数据库查询获取真实路径
-    private String RealPath(String newfilename){
-        Connection conn=null;
-        PreparedStatement ps=null;
-        ResultSet rs=null;
-        String GetPath=null;
-        try{
-            conn= DBUtil.getConn();
-            String sql="select path from image where newfilename=?";       //通过ID找到图片路径
-            ps=conn.prepareStatement(sql);
-            ps.setString(1,newfilename);
-            rs=ps.executeQuery();   //执行查询
-            if(rs.next()){
-                GetPath=rs.getString("path");
-            }
-            System.out.println("查询成功");
-            System.out.println(GetPath);
-        }catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.closeConn(conn);
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return GetPath;
-    }
-
     //更新数据库访问次数
     private void View(String imageid){
 
-//        this.imageService.create(0,fileName,goodsC_date,0,null);
-        int viewTimes;
         this.imageService.updateViewTimes(imageid);
-
-        System.out.println("查询图片ID成功");
+        this.logger.info("访问数据库成功 ");
 
     }
 }
