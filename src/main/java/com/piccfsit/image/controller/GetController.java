@@ -18,9 +18,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * 实现图片获取：原图、裁剪图、缩略图 文件打包
+ * 实现图片获取：裁剪图 缩略图 文件打包
  * @author wangwq
- * @date 2017.9.26 11:51
+ * @date 2017.11.3 11:51
  */
 
 @RestController

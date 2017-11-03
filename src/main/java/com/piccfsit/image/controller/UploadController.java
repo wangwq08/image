@@ -21,19 +21,15 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * 实现图片的上传及保存
+ * 实现图片的上传及保存：原图、裁剪图、缩略图
  * @author wangwq
  * @date 2017.9.26 11:51
+ * @return code：1  success:true  data:图片ID  message:上传成功
  */
 
 @Controller
 public class UploadController {
 
-    /**
-     * 实现图片上传
-     * @autho wqwang
-     * @return code：1  success:true  data:图片ID  message:上传成功
-     */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public static int  width=1024;     //裁剪图宽度设置
@@ -47,7 +43,6 @@ public class UploadController {
 
     @Autowired
     private ImageServiceImpl imageService;
-
 
     @RequestMapping("upload")                                           //图片上传
     @ResponseBody
@@ -77,18 +72,8 @@ public class UploadController {
         this.logger.debug("文件大小   [{}]KB",file.getSize()/1024);
 
 
-
-        //图片名称
-        String fileName = file.getOriginalFilename();
-
-        String temp[] = fileName.replaceAll("\\\\","/").split("/");   //路径名和文件名分割，获取文件名
-        if (temp.length > 1) {
-            fileName = temp[temp.length - 1];
-        }
-
-        String newFilename = UUID.randomUUID().toString();
-        fileName=newFilename;
-        this.logger.debug("生成图片ID  [{}]",newFilename);
+        String fileName=UUID.randomUUID().toString();
+        this.logger.debug("生成图片ID  [{}]",fileName);
 
         //原图路径
         String path=ip.getPath();
@@ -119,29 +104,22 @@ public class UploadController {
         String cpath=ip.getCpath();
         File crepath=new File(cpath+"/"+fileName);
         height=(int)(width/ratio);
-
-        reduce.reduceImg(dest.toString(),crepath.toString(),width,height,null);
-        String imagepath=crepath.toString();      //数据库存储路径
-        image=Write1(fileName,newFilename,imagepath);
-        System.out.println("裁剪图存储成功");
-
-
+        reduce.reduceImg(dest.toString(),crepath.toString(),width,height,null);                        //裁剪图片
+        this.logger.info("裁剪图存储成功");
 
         //缩略图路径
         String tpath=ip.getTpath();
         File trepath=new File(tpath+"/"+fileName);
-        String tnewFilename=newFilename+"1";
         thumbheight=(int)(thumbwidth/ratio);
-
         reduce.reduceImg(dest.toString(),trepath.toString(),thumbwidth,thumbheight,null);              //缩略图片
-        String timagepath = trepath.toString();  //数据库存储路径
-        System.out.println("缩略图存储成功");
+        this.logger.info("缩略图存储成功");
 
+        image=Write(fileName);                         //将图片ID写入数据库
         return image;
     }
 
     //将图片ID保存到数据库：图片ID 上传时间  浏览次数  用户token
-    public  Image Write1(String fileName,String newFilename,String imagepath){
+    public  Image Write(String fileName){
 
         Date date = new Date();//获得系统时间.
         String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
@@ -152,7 +130,7 @@ public class UploadController {
         Image image =new Image();
         image.setCode(1);
         image.setSuccess(true);
-        image.setData(newFilename);
+        image.setData(fileName);
         image.setMessage("上传成功！");
         return image;
     }
