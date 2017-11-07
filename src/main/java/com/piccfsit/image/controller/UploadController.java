@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -45,7 +46,7 @@ public class UploadController {
 
     @RequestMapping("upload")                                           //图片上传
     @ResponseBody
-    public Image upload(@RequestParam("filename") MultipartFile file) throws IOException{
+    public Image upload(@RequestParam("filename") MultipartFile file) throws IOException {
         // 返回信息
         Image image = new Image();
         image.setCode(0);

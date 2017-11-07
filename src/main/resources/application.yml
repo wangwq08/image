@@ -5,8 +5,8 @@ spring:
   http:
     multipart:
       maxFileSize: 5MB       #单个文件上传大小限制 5*1024=5120k
-      # maxRequestSize: 50MB    #总文件的上传大小限制
-      max-request-size: 5MB
+      max-request-size: 5MB   #避免异常 设置为-1
+
   mvc:
     view:
       prefix: /               #默认前缀

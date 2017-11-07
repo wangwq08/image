@@ -2,6 +2,7 @@ package com.piccfsit.image.service;
 
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
