@@ -1,0 +1,36 @@
+spring:
+  thymeleaf:
+    catch: false                   #缓存配置
+    prefix: classpath:/static/     #视图返回路径
+  http:
+    multipart:
+      maxFileSize: 5MB       #单个文件上传大小限制 5*1024=5120k
+      max-request-size: 5MB   #避免异常 设置为-1
+
+  mvc:
+    view:
+      prefix: /               #默认前缀
+      suffix: .html           #响应页面默认后缀
+  datasource:
+    driver-class-name: "com.mysql.jdbc.Driver"
+    url: "jdbc:mysql://localhost:3306/test"
+    username: "root"
+    password: ""
+
+imagepath:
+  path : "D:/test"                  #原图地址
+  cpath : "D:/image"                #裁剪图地址
+  tpath : "D:/thumb"                #缩略图地址
+
+imagesize:
+  width: 1024                      #裁剪图宽度
+  thumbwidth: 100                 #缩略图宽度
+
+server:
+  port: 8080                  #默认端口
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.piccfsit.image: DEBUG
+

@@ -19,11 +19,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Image handleError1(MultipartException e) throws Exception {
 
-        Image image = new Image();
-        image.setCode(0);
-        image.setSuccess(false);
-        image.setData(null);
-        image.setMessage(e.getMessage());
+        Image image = new Image(0,false,null,e.getMessage());
         this.logger.debug("异常信息  [{}]",image.getMessage());
         return image;
     }

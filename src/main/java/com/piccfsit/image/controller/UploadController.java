@@ -48,11 +48,7 @@ public class UploadController {
     @ResponseBody
     public Image upload(@RequestParam("filename") MultipartFile file) throws IOException {
         // 返回信息
-        Image image = new Image();
-        image.setCode(0);
-        image.setSuccess(false);
-        image.setData(null);
-        image.setMessage("上传失败，请重新上传");
+        Image image = new Image(0,false,null,"请重新上传");
 
         if (file.isEmpty()) {
             image.setMessage("图片为空，请重新上传");
@@ -127,12 +123,6 @@ public class UploadController {
         Timestamp goodsC_date = Timestamp.valueOf(nowTime);
 
         this.imageService.create(0,fileName,goodsC_date,0,null);
-
-        Image image =new Image();
-        image.setCode(1);
-        image.setSuccess(true);
-        image.setData(fileName);
-        image.setMessage("上传成功！");
-        return image;
+        return new Image(1,true,fileName,"上传成功");
     }
 }

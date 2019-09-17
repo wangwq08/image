@@ -38,5 +38,11 @@ public class Image {
         return message;
     }
 
+    public Image(int code, boolean success, String data, String message) {
+        this.code = code;
+        this.success = success;
+        this.data = data;
+        this.message = message;
+    }
 
 }
